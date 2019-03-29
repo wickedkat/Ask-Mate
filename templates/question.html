@@ -1,0 +1,109 @@
+{% extends "layout.html" %}  <!-- extends to parent template -->
+{% block content %}
+<br>
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-3">
+            {% if session['username'] %}
+            <div class="content-section" align="center">
+                <h4>Menu:</h4>
+                <ul class="list-group">
+                    <a class="btn btn-secondary btn-block" href="/question/new-answer/{{ question.id }}" role="button">Add
+                        answer</a><br>
+                    <form action="/question/{{ question['id'] }}/delete" method="post">
+                        <button class="btn btn-secondary btn-block" type="submit">Delete question</button>
+                    </form>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <h6 class="card-header">Question: {{ question.title }}</h6>
+                <div class="card-body">
+                    {{ question.message }}
+                    <br><br>
+                </div>
+
+                <br>
+                <div class="offset">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Submission time</th>
+                            <th scope="col">Message</th>
+                            {% if session['username'] %}
+                            <th scope="col"></th>
+                            <th scope="col">Delete</th>
+                            {% endif %}
+                            <th scope="col">Author</th>
+                        </tr>
+                        </thead>
+                        {% for answer in answers %}
+                        <tr>
+                            <td>{{ answer.submission_time }}</td>
+                            <td>
+                                {% if answer['username'] == session['username'] %}
+                                <a href="/edit-answer/{{ answer.id }}">{{ answer.message }}</a>
+                                {% else %}
+                                {{ answer.message }}
+                                {% endif %}
+                            </td>
+                            {% if session['username'] %}
+                            <td><a class="btn btn-sm btn-info" href='/answer/new-comment/{{ answer.id }}'
+                                   role="button">Add comment</a>
+                            </td>
+                            {% if answer['username'] == session['username'] %}
+                            <td>
+                                <form action="/answer/{{ answer['id'] }}/delete" method="post">
+                                    <button class="btn btn-sm btn-info" type="submit">Delete answer</button>
+                                </form>
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            <td>{{answer.username }}</td>
+                        </tr>
+
+                        {% if all_comments %}
+                        {% for comment in all_comments %}
+                        {% if comment.answer_id == answer.id %}
+                        <tr class="table-secondary">
+
+                            <td>{{ comment.submission_time }}</td>
+                            <td>
+                                {% if comment.username == session['username']%}
+                                <a href="/edit-comment/{{ comment.id }}">{{ comment.message }}</a>
+                                {% else %}
+                                {{ comment.message }}
+                                {% endif %}
+                            </td>
+                            <td></td>
+                            {% if comment.username == session['username']%}
+                            <td>
+                                <form action="/comment/{{ comment['id'] }}/delete" method="post">
+                                    <button class="btn btn-sm btn-info" type="submit">Delete comment
+                                    </button>
+                                </form>
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            <td>{{comment.username }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

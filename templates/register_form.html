@@ -1,0 +1,23 @@
+{% extends "layout.html" %}  <!-- extends to parent template -->
+{% block content %}
+    <br>
+    <div class="card text-center" style="width: auto">
+        <div class="card-header">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="card-body">
+            <form action='/registration' method="POST">
+                <input type="text" name="username" placeholder="username" value="{{ username }}" required>
+                <input type="text" name="password" placeholder="password" value="{{ password }}" required>
+                <br><br>
+                <button class="btn btn-info" type="submit">Sign up</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

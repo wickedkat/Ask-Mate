@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<br>
+<div class="card">
+
+</div>
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form action="{{ form_url }}" method="post">
+        <p>
+            <label for="message">Your comment</label><br>
+            <textarea id="message" name="message" placeholder="Enter your comment here" rows="5" cols="60"
+                        required=on autofocus>{% if edit_comment %}{{ edit_comment['message'] }}{% endif %}</textarea>
+        </p>
+        <br>
+    <button class="btn btn-secondary" type="submit">{{ button_title }}</button>
+</form>
+</div>
+{% endblock %}
